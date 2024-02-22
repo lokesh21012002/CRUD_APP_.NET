@@ -17,11 +17,17 @@ namespace NET.Models
         // }
         [Required]
 
+
         public int ID { get; set; }
+        [Required]
+        [DataType("String")]
+        [DisplayName("Student's Full Name")]
+
         public string? Name { get; set; }
         [Required]
         public int Standard { get; set; }
         [StuentValidation]
+        [AllowedValues("Female", "Male")]
         public string Gender { get; set; }
 
         [EmailValidation]

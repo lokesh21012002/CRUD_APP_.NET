@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NET.Db;
 using MySqlConnector;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,10 +15,31 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
-builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
+{
+    options.Cookie.Name = "MyCookieAuth";
 
+
+
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Must be Teaccher", policy =>
+    {
+        policy.RequireClaim("gmail", "teacher@gmail.com");
+
+
+    });
+});
+// builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection")!);
+
+
+
+builder.Services.AddEntityFrameworkMySql()
+                .AddDbContext<ApplicationDbContext>(options =>
+                {
+                    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"));
+                });
 
 
 

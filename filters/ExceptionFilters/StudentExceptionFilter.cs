@@ -18,7 +18,7 @@ namespace NET.filters.ExceptionFilters
             var studentId = context.RouteData.Values["id"].ToString();
             if (int.TryParse(studentId, out int id))
             {
-                if (!StudentRepository.isStudentExist(id))
+                if (!StudentRepository.IsStudentExist(id))
                 {
                     context.ModelState.AddModelError("id", "Student not found");
                     var problemobj = new ValidationProblemDetails(context.ModelState)
